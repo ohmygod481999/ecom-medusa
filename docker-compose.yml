@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # image: longvb/baleine-bleue-api:latest
+    container_name: ecom-medusa
+    env_file:
+        - .env
+    ports:
+      - "9000:9000"
