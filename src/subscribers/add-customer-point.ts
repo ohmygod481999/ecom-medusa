@@ -33,8 +33,8 @@ export default class AddCustomerPointSubscriber {
     this.totalsService_ = totalsService;
     this.loyaltyService_ = loyaltyService;
 
-    eventBusService.subscribe(OrderService.Events.PLACED, this.handleOrderPlaced);
-    // eventBusService.subscribe(OrderService.Events.COMPLETED, this.handleOrderPlaced);
+    // eventBusService.subscribe(OrderService.Events.PLACED, this.handleOrderPlaced);
+    eventBusService.subscribe(OrderService.Events.COMPLETED, this.handleOrderPlaced);
   }
 
   handleOrderPlaced = async (data: Order): Promise<void> => {

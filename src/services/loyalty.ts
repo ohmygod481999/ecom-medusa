@@ -1,5 +1,5 @@
 import { Lifetime } from "awilix"
-import { TransactionBaseService } from "@medusajs/utils";
+import { TransactionBaseService } from "@medusajs/medusa";
 import { IEventBusService } from "@medusajs/types";
 import { Customer, CustomerService, GiftCard, GiftCardService, RegionService } from "@medusajs/medusa";
 import {MedusaError} from 'medusa-core-utils';
@@ -71,9 +71,11 @@ export default class LoyaltyService extends TransactionBaseService {
 
   async getCustomerLoyaltyInfo(c: string | Customer): Promise<LoyaltyInfo> {
     let customer: Customer
+    console.log("Customer is", c);
     if (typeof c === "string") {
+      console.log("Customer is string", c);
       customer = await this.customerService_.retrieve(c, {
-        select: ["metadata"],
+        // select: ["metadata"],
       })
     } else {
       customer = c
@@ -145,7 +147,7 @@ export default class LoyaltyService extends TransactionBaseService {
   async addCustomerPoints(customerId: string, expense: number) {
     console.log("Add customer points");
     const customer = await this.customerService_.retrieve(customerId, {
-      select: ["metadata"],
+      // select: ["metadata"],
     })
     // current reward balance of customer
 

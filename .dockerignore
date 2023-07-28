@@ -1,0 +1,6 @@
+.env
+dist
+.git
+build
+node_modules
+.env.production

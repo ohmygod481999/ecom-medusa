@@ -22,8 +22,12 @@ try {
 } catch (e) {}
 
 // CORS when consuming Medusa from admin
+// const ADMIN_CORS =
+//   process.env.ADMIN_CORS || 'http://localhost:7000,http://localhost:7001';
+
+console.log(process.env.ADMIN_CORS)
 const ADMIN_CORS =
-  process.env.ADMIN_CORS || 'http://localhost:7000,http://localhost:7001';
+  process.env.ADMIN_CORS || 'http://longvb.ddns.net:7000';
 
 // CORS to avoid issues when consuming Medusa from a client
 const STORE_CORS =
@@ -41,7 +45,8 @@ const plugins = [
   `medusa-payment-manual`,
   // To enable the admin plugin, uncomment the following lines and run `yarn add @medusajs/admin`
   {
-    resolve: 'admin-longvb',
+    // resolve: 'admin-longvb',
+    resolve: '@medusajs/admin',
     /** @type {import('@medusajs/admin').PluginOptions} */
     options: {
       autoRebuild: true,
@@ -83,8 +88,10 @@ const projectConfig = {
   store_cors: STORE_CORS,
   admin_cors: ADMIN_CORS,
   // Uncomment the following lines to enable REDIS
-  // redis_url = REDIS_URL
+  redis_url: REDIS_URL
 };
+
+console.log(projectConfig)
 
 if (DATABASE_URL && DATABASE_TYPE === 'postgres') {
   projectConfig.database_url = DATABASE_URL;
