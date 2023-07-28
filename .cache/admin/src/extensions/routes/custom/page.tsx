@@ -3,7 +3,7 @@ import { RouteConfig } from "@medusajs/admin"
 const CustomPage = () => {
   return (
     <div>
-      This is my custom route
+      This is my custom route 1
     </div>
   )
 }
