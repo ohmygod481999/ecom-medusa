@@ -5,7 +5,7 @@ import * as bodyParser from "body-parser"
 import 
   authenticate 
 from "@medusajs/medusa/dist/api/middlewares/authenticate-customer"
-import LoyaltyService from 'services/loyalty';
+import LoyaltyService from '../../../services/loyalty';
 
 const loyaltyRouter = Router()
 export default function getLoyaltyRouter(): Router {

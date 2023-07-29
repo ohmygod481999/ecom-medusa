@@ -2,6 +2,7 @@ import {
   BeforeInsert, 
   Column, 
   Entity, 
+  Index, 
   JoinColumn, 
   ManyToOne, 
   PrimaryColumn,
@@ -20,7 +21,8 @@ export class Article extends BaseEntity {
   @Column({ type: "varchar" })
   title: string | null
 
-  @Column({ type: "varchar", unique: true })
+  @Index({ unique: true, where: "deleted_at IS NULL" })
+  @Column({ type: "text", nullable: true })
   handle: string | null
 
   @Column({ type: "text", nullable: true })

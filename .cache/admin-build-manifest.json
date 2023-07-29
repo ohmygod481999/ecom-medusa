@@ -20,7 +20,7 @@
     "medusa-plugin-sendgrid": "^1.3.9",
     "typeorm": "^0.3.16"
   },
-  "modifiedAt": 1690518017275.7532,
+  "modifiedAt": 1690532913681.7012,
   "plugins": [],
   "options": {
     "backend": "/",

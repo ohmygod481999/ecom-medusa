@@ -1,7 +1,7 @@
 import { EntityManager } from "typeorm";
 import { CustomerService, Order, OrderService, TotalsService } from "@medusajs/medusa";
 import { IEventBusService } from "@medusajs/types";
-import LoyaltyService from "services/loyalty";
+import LoyaltyService from "../services/loyalty";
 
 export default class AddCustomerPointSubscriber {
   protected readonly manager_: EntityManager;

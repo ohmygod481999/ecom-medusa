@@ -1,5 +1,6 @@
 import {Router} from 'express';
 import storeRouter from './routes/store';
+import adminRouter from './routes/admin';
 import {getConfigFile, parseCorsOrigins} from 'medusa-core-utils';
 import {ConfigModule} from '@medusajs/medusa/dist/types/global';
 import cors from 'cors';
@@ -15,8 +16,6 @@ export default (rootDirectory: string): Router | Router[] => {
     credentials: true,
   };
 
-  console.log('corsOptions', corsOptions);
-
   // add your custom routes here
-  return [storeRouter(corsOptions)];
+  return [storeRouter(corsOptions), adminRouter(corsOptions)];
 };

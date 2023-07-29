@@ -13,7 +13,8 @@ export class AddArticleAndCategory1690521607982 implements MigrationInterface {
       await queryRunner.query(
       `ALTER TABLE "article" ADD CONSTRAINT "FK_3fcafeeba5c812875141866c" FOREIGN KEY ("article_category_id") REFERENCES "article_category"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
     )
-        // await queryRunner.query(`CREATE UNIQUE INDEX "IDX_db7355f7bd36c547c8a4f539e5" ON "product" ("handle") `);
+      await queryRunner.query(`CREATE UNIQUE INDEX "IDX_4b26a43aa57f7a752a3d88bd" ON "article" ("handle") `);
+      await queryRunner.query(`CREATE UNIQUE INDEX "IDX_d814b0033fa79be8177d79d4" ON "article_category" ("handle") `);
 
     }
 
@@ -21,6 +22,8 @@ export class AddArticleAndCategory1690521607982 implements MigrationInterface {
       await queryRunner.query(
         `ALTER TABLE "article" DROP CONSTRAINT "FK_3fcafeeba5c812875141866c"`
       )
+      await queryRunner.query(`DROP INDEX "IDX_4b26a43aa57f7a752a3d88bd"`);
+      await queryRunner.query(`DROP INDEX "IDX_d814b0033fa79be8177d79d4"`);
       await queryRunner.query(`DROP TABLE "article"`)
       await queryRunner.query(`DROP TYPE "article_status_enum"`)
       await queryRunner.query(`DROP TABLE "article_category"`)
