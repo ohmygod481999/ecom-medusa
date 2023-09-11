@@ -5,6 +5,7 @@ import {
   FindConfig,
   TransactionBaseService,
   Selector,
+  EventBusService,
 } from '@medusajs/medusa';
 import {EntityManager} from 'typeorm';
 import {Article, ArticleStatus} from '../models/article';
@@ -32,12 +33,23 @@ interface UpdateArticleInput {
 class ArticleService extends TransactionBaseService {
   protected manager_: EntityManager;
   protected transactionManager_: EntityManager;
+  protected readonly eventBus_: EventBusService
+
+  static readonly Events = {
+    UPDATED: "product.updated",
+    CREATED: "product.created",
+    DELETED: "product.deleted",
+  }
+
+
 
   private articleRepository: typeof ArticleRepository;
 
   constructor(container) {
     super(container);
     this.articleRepository = container.articleRepository;
+    this.eventBus_ = container.eventBusService
+
   }
 
   async retrieve_(
@@ -74,6 +86,8 @@ class ArticleService extends TransactionBaseService {
         `"productId" must be defined`,
       );
     }
+
+    config.relations = ['article_category'];
 
     return await this.retrieve_({id: articleId}, config);
   }
@@ -117,6 +131,31 @@ class ArticleService extends TransactionBaseService {
     const result = await this.articleRepository.save(article);
 
     return result;
+  }
+
+  async delete(articleId: string): Promise<void> {
+    return await this.atomicPhase_(async manager => {
+      const articleRepo = manager.withRepository(this.articleRepository);
+
+      // Should not fail, if product does not exist, since delete is idempotent
+      const product = await articleRepo.findOne({
+        where: {id: articleId},
+      });
+
+      if (!product) {
+        return;
+      }
+
+      await articleRepo.softRemove(product);
+
+      await this.eventBus_
+        .withTransaction(manager)
+        .emit(ArticleService.Events.DELETED, {
+          id: articleId,
+        });
+
+      return Promise.resolve();
+    });
   }
 }
 

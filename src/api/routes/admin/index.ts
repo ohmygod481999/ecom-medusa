@@ -10,6 +10,7 @@ import
 from "@medusajs/medusa/dist/api/middlewares/error-handler"
 
 import getAdminArticleRouter from "./article";
+import getAdminArticleCategoryRouter from "./article-category";
 
 const adminRouter = Router()
 export default function getStoreRouter(storeCorsOptions): Router {
@@ -20,6 +21,12 @@ export default function getStoreRouter(storeCorsOptions): Router {
     "/admin/article",
     // authenticate(),
     getAdminArticleRouter()
+  )
+
+  adminRouter.use(
+    "/admin/article-category",
+    // authenticate(),
+    getAdminArticleCategoryRouter()
   )
 
   adminRouter.use(errorHandler())

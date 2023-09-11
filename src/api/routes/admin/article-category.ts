@@ -9,98 +9,96 @@ import {
 import {Type} from 'class-transformer';
 
 import {
-  Customer,
-  GiftCardService,
   transformQuery,
   wrapHandler,
 } from '@medusajs/medusa';
-import {NextFunction, Request, Response, Router} from 'express';
+import {Request, Response, Router} from 'express';
 import {MedusaError} from 'medusa-core-utils';
 import * as bodyParser from 'body-parser';
-import ArticleService from '../../../services/article';
+import ArticleCategoryService from '../../../services/article-category';
 import {FilterableArticleProps} from '../../../types/article';
-import {ArticleStatus} from '../../../models/article';
 import {validator} from '../../../utils/validator';
 import {EntityManager} from 'typeorm';
 // import LoyaltyService from 'services/loyalty';
 
-const articleRouter = Router();
-export default function getAdminArticleRouter(): Router {
-  articleRouter.use(bodyParser.json());
+const articleCategoryRouter = Router();
+export default function getAdminArticleCategoryRouter(): Router {
+  articleCategoryRouter.use(bodyParser.json());
 
-  // create article
-  articleRouter.post(
+  // create article category
+  articleCategoryRouter.post(
     '/',
     wrapHandler(async (req: Request, res: Response) => {
-      const validated = await validator(AdminPostArticleReq, req.body);
+      const validated = await validator(AdminPostArticleCategoryReq, req.body);
 
       const entityManager: EntityManager = req.scope.resolve('manager');
-      const articleService: ArticleService = req.scope.resolve(
-        'articleService',
+      const articleCategoryService: ArticleCategoryService = req.scope.resolve(
+        'articleCategoryService',
       );
 
-      const article = await entityManager.transaction(async manager => {
-        const newArticle = await articleService
+      const articleCate = await entityManager.transaction(async manager => {
+        const newArticleCate = await articleCategoryService
           .withTransaction(manager)
-          .createArticle({...validated});
+          .create({...validated});
 
-        return newArticle;
+        return newArticleCate;
       });
 
-      res.status(200).json({article: article});
+      res.status(200).json({"article_category": articleCate});
     }),
   );
 
   // update article
-  articleRouter.put(
+  articleCategoryRouter.put(
     '/:id',
     wrapHandler(async (req: Request, res: Response) => {
       const {id} = req.params;
 
-      const validated = await validator(AdminUpdateArticleReq, req.body);
+      const validated = await validator(AdminUpdateArticleCategoryReq, req.body);
 
       const entityManager: EntityManager = req.scope.resolve('manager');
-      const articleService: ArticleService = req.scope.resolve(
-        'articleService',
+      const articleCategoryService: ArticleCategoryService = req.scope.resolve(
+        'articleCategoryService',
       );
 
       const article = await entityManager.transaction(async manager => {
-        const newArticle = await articleService
+        const newArticleCategory = await articleCategoryService
           .withTransaction(manager)
           .update(id, {...validated});
 
-        return newArticle;
+        return newArticleCategory;
       });
 
-      res.status(200).json({article: article});
+      res.status(200).json({"article_category": article});
     }),
   );
 
-  // delete article
-  articleRouter.delete(
+  // delete article category
+  articleCategoryRouter.delete(
     '/:id',
     wrapHandler(async (req: Request, res: Response) => {
       const {id} = req.params;
 
-      const articleService: ArticleService = req.scope.resolve(
-        'articleService',
+      const articleCategoryService: ArticleCategoryService = req.scope.resolve(
+        'articleCategoryService',
       );
       const manager: EntityManager = req.scope.resolve('manager');
       await manager.transaction(async transactionManager => {
-        return await articleService
+        return await articleCategoryService
           .withTransaction(transactionManager)
           .delete(id);
       });
 
       res.json({
         id,
-        object: 'article',
+        object: 'article_category',
         deleted: true,
       });
     }),
   );
 
-  articleRouter.get(
+
+  articleCategoryRouter.get(
     '/',
     transformQuery(AdminGetArticlesParams, {
       defaultRelations: [],
@@ -111,17 +109,16 @@ export default function getAdminArticleRouter(): Router {
       console.log(req.listConfig);
       const {skip, take, relations} = req.listConfig;
 
-      const articleService: ArticleService = req.scope.resolve(
-        'articleService',
+      const articleCategoryService: ArticleCategoryService = req.scope.resolve(
+        'articleCategoryService',
       );
 
-      const [rawArticles, count] = await articleService.listAndCount(
-        req.filterableFields,
+      const [rawArticleCategories, count] = await articleCategoryService.listAndCount(
         req.listConfig,
       );
 
       res.status(200).json({
-        articles: rawArticles,
+        "article_categories": rawArticleCategories,
         count,
         offset: skip,
         limit: take,
@@ -129,7 +126,7 @@ export default function getAdminArticleRouter(): Router {
     },
   );
 
-  return articleRouter;
+  return articleCategoryRouter;
 }
 
 export class AdminGetArticlesParams extends FilterableArticleProps {
@@ -156,63 +153,27 @@ export class AdminGetArticlesParams extends FilterableArticleProps {
   order?: string;
 }
 
-export class AdminPostArticleReq {
+export class AdminPostArticleCategoryReq {
   @IsString()
   title: string;
 
   @IsString()
   @IsOptional()
-  content?: string;
-
-  @IsString()
-  @IsOptional()
-  thumbnail?: string;
-
-  @IsString()
-  @IsOptional()
   handle?: string;
-
-  @IsOptional()
-  @IsEnum(ArticleStatus)
-  status?: ArticleStatus = ArticleStatus.DRAFT;
-
-  @IsOptional()
-  @IsString()
-  article_category_id?: string;
 
   @IsObject()
   @IsOptional()
   metadata?: Record<string, unknown>;
 }
 
-export class AdminUpdateArticleReq {
+export class AdminUpdateArticleCategoryReq {
   @IsString()
   @IsOptional()
   title?: string;
 
   @IsString()
   @IsOptional()
-  subtitle?: string;
-
-  @IsString()
-  @IsOptional()
-  content?: string;
-
-  @IsString()
-  @IsOptional()
-  thumbnail?: string;
-
-  @IsString()
-  @IsOptional()
   handle?: string;
-
-  @IsOptional()
-  @IsEnum(ArticleStatus)
-  status?: ArticleStatus = ArticleStatus.DRAFT;
-
-  @IsOptional()
-  @IsString()
-  article_category_id?: string;
 
   @IsObject()
   @IsOptional()
