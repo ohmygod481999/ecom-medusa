@@ -18,6 +18,9 @@ interface CreateArticleCategoryInput {
 
 interface UpdateArticleCategoryInput {
   title?: string;
+  article_category_id?: string;
+  thumbnail?: string;
+  content?: string;
   handle?: string;
 }
 

@@ -50,8 +50,9 @@ const plugins = [
     /** @type {import('@medusajs/admin').PluginOptions} */
     options: {
       autoRebuild: true,
-      ecomBackend: 'http://asdasd.asd',
-      base: '/admin',
+      path: "/app",
+      // ecomBackend: 'http://asdasd.asd',
+      // base: '/admin',
     },
   },
   {
@@ -62,6 +63,12 @@ const plugins = [
       order_placed_template: process.env.SENDGRID_ORDER_PLACED_ID,
     },
   },
+  {
+    resolve: `@medusajs/file-local`,
+    options: {
+      // optional
+    },
+  }
 ];
 
 const modules = {

@@ -1,0 +1,7 @@
+.bg-ui-bg-overlay {
+  z-index: 40;
+}
+
+.bg-ui-bg-base {
+  z-index: 41;
+}
