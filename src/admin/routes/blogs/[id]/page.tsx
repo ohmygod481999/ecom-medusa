@@ -23,7 +23,6 @@ const UpdateBlogPage = (props: RouteProps) => {
               <div className="flex items-center justify-between">
                 <h1 className="text-grey-90 inter-xlarge-semibold">Blog</h1>
               </div>
-              <ModalCreateBlog />
             </div>
           </Card>
         </div>

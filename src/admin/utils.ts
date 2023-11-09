@@ -6,3 +6,4 @@ export const formatVietnamMoney = (amount: number): string => {
 }
 
 export const BACKEND_URL = "http://localhost:9000"
+// export const BACKEND_URL = "http://longvb.ddns.net:9000"
